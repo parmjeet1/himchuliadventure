@@ -1,19 +1,10 @@
-/*
-add trip category  or select from previous
-add country
-add
-
-
-*/ 
-
 const express=require("express");
-const { addCountry,addState,addTrip } = require("../controllers/tripController");
 const dashBoardRouter= express.Router();
 // import file
-dashBoardRouter.post("/add-country",addCountry);
-dashBoardRouter.post("/add-state",addState);
 
-dashBoardRouter.post("/add-trip",addTrip);
+//dashBoardRouter.post("/add-state",addState);
+
+//dashBoardRouter.post("/add-trip",addTrip);
 
 /*router.POST("/add-country",addCountry);
 router.POST("/add-trip",addTrip);
