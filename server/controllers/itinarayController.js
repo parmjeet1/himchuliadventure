@@ -19,10 +19,10 @@ const addDay = async (req, res) => {
 const fetchItinaray= async (req,res) =>{
    try{
 
-    const {id}=req.params;
+    const {name}=req.params;
 if(!id){ return res.status(400).json({error:"id could not foud"}) }
 
-    const itinaray=await ItinarayModel.find({packageId:id}).select("-updatedBy -createdAt -updatedAt");
+    const itinaray=await ItinarayModel.find({title:name}).select("-updatedBy -createdAt -updatedAt");
     if(!itinaray){ res.status(401).json({error:"Itinary could not found!"}) }
     console.log(itinaray);
     return res.status(200).json({ package:itinaray })
