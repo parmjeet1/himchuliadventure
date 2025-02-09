@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.send("hello himchuli how are you doing! hi");
 });
 const port = process.env.PORT;
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
   console.log(`server running at ${port} `);
   connectDB();
 });
