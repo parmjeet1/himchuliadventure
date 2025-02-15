@@ -1,7 +1,7 @@
 const countriesModel = require("../models/CountriesModel");
 const addCountry = async (req, res) => {
   try {
-    const { name, updatedBy } = req.body;
+    const { name, updatedBy} = req.body;
     const dbCountry = await countriesModel.findOne({ name });
 
     if (dbCountry) {
@@ -21,16 +21,36 @@ const addCountry = async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message });
   }
 };
+
+const addCountryCoverView=async (req,res)=>{
+  
+  if (!req.file) {
+    return res.status(422).json({ error: "Image file is required" });
+  }
+  
+  console.log(req.file.filename);
+  const {countryId,coverHeading,coverParagraph}=req.body;
+if(!countryId||!coverHeading||!coverParagraph){
+  return res.status(201).json({error:"Fileds can not be blank "})
+}
+const imagePath = `/uploads/${req.file.filename}`;
+const updateCountry=await countriesModel.findOneAndUpdate({_id:countryId},{homeFetaureImage:imagePath,gridViewStatus:true, coverHeading,coverParagraph,updatedAt:Date.now()});
+if(!updateCountry){return res.status(201).json({error:"Could not Update"})}
+return res.status(200).json({message:"updated Successfully",updateCountry})
+
+}
+
+
 const fetchCountry= async (req,res) =>{
    try{
-    console.log("contry working")
+   
     const {id}=req.params;
 if(!id){ return res.status(400).json({error:"id could not foud"}) }
 
     const dbCountries=await countriesModel.findOne({_id:id}).select("-updatedBy -createdAt -updatedAt");
     if(!dbCountries){ res.status(401).json({error:"Country could not found!"}) }
     console.log(dbCountries);
-    return res.status(200).json({ name:dbCountries.name })
+    return res.status(200).json({ country:dbCountries })
 
    }catch(error){
     return res.status(401).json({message:"internal server error",error:error.message});
@@ -40,4 +60,4 @@ if(!id){ return res.status(400).json({error:"id could not foud"}) }
 
 
 
-module.exports = { addCountry,fetchCountry };
+module.exports = { addCountry,fetchCountry,addCountryCoverView };

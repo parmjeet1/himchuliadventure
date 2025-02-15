@@ -5,7 +5,8 @@ const Destinationschema=new mongoose.Schema({
     name:{type :String, required:true},
     location:{type:String, required:true},
     description:{type:String, required:true},
-    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' }   
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' }
+       
 }, {timestamps:true} )
 
 const DestinationsModel=mongoose.model('destinations',Destinationschema);

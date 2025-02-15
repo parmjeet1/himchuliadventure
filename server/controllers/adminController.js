@@ -7,8 +7,8 @@ require("dotenv").config();
 
 const adminRegistration = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
-        if (name == null || email == null || password == null || role == null) {
+        const { name, email, password,mobile, role } = req.body;
+        if (name == null || email == null || mobile==null || password == null || role == null) {
             return res.status(400).json({ "message": "fileds can not be empty" });
         }
         const existEmail = await User.findOne({ email });
@@ -16,7 +16,7 @@ const adminRegistration = async (req, res) => {
             return res.status(400).json({ "message": ` ${email}, this email already used  ` });
         }
         const hasPassword = await bcrypt.hash(password, 10);
-        const user = new User({ name, email, password: hasPassword, role });
+        const user = new User({ name, email, password: hasPassword,mobile, role });
         await user.save();
         res.status(201).json({ "message": "user Register successfully!", "user": user });
 
