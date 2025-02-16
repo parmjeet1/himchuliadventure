@@ -3,10 +3,27 @@ require("dotenv").config();
 const app = express();
 const path = require("path");
 const connectDB = require("./config/db");
+const cors = require("cors");
 
 // Connect to DB
 connectDB();
+const allowedOrigins = [
+  "http://localhost:3000",  // Allow localhost (for development)
+  "http://himchuliadventure.com" // Replace with your actual client domain
+];
+const corsOptions = {
+  origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+      } else {
+          callback(new Error("Not allowed by CORS"));
+      }
+  },
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // If using cookies or authentication
+};
 
+app.use(cors(corsOptions));
 // Import Routes
 const adminRoutes = require("./routes/adminRoute");
 const dashBoardRouter = require("./routes/dashboardRoute");
@@ -24,7 +41,9 @@ const packagePublicRouter = require("./routes/packagePublicRoute");
 const countryPublicRouter = require("./routes/countryPublicRoute");
 const galleryRouter=require("./routes/galleryRoute");
 const galleryPublicRouter = require("./routes/galleryPublicRoute");
+const cricleRouter = require("./routes/cricleDestinationRoute");
 // Middleware
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -37,7 +56,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/admin/country", CountriesRouter);
 app.use("/api/admin/state", stateRouter);
 app.use("/api/admin/destination", destinationRouter);
-app.use("/api/admin/itinary", itinarayRouter);
+app.use("/api/itinary", itinarayRouter);
 app.use("/api/admin/exclusion", exclusionRouter);
 app.use("/api/admin/inclusion", inclusionRouter);
 app.use("/api/trip-detail", tripDetailRouter);
@@ -48,6 +67,8 @@ app.use("/api/package",packagePublicRouter);
 app.use("/api/country",countryPublicRouter);
 app.use("/api/admin/galery",galleryRouter);
 app.use("/api/gallery",galleryPublicRouter)
+app.use("/api/admin/destination",cricleRouter);
+
 // Default Route
 app.get("/", (req, res) => {
   res.send("Hello Himchuli! Server is running.");

@@ -16,7 +16,7 @@ const addimageTogallery = async (req, res) => {
         }
 
         // Correctly use the stored filename from Multer
-        const imagePath = `/uploads/${req.file.filename}`;
+        const imagePath = `http://13.60.227.23:5000/uploads/${req.file.filename}`;
 
         // Update package with new image path
         const addNewImage = galleryModel({ image: imagePath, altTag });
