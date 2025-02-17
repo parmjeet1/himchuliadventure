@@ -18,7 +18,7 @@ function ContactPage() {
           priority
         />
         <h1 className="text-4xl md:text-5xl font-bold relative z-10">
-          Contact Us!
+          Contact Us
         </h1>
       </div>
 
@@ -57,9 +57,7 @@ function ContactPage() {
         </div>
 
         {/* Contact Us Form */}
-        <div className="container mx-auto px-6 py-12">
-          <ContactUs />
-        </div>
+        <ContactUs />
       </div>
     </div>
   );
