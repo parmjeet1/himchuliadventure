@@ -17,9 +17,9 @@ const addCrcileImageToDestination = async (req, res) => {
         }
 
         // Correctly use the stored filename from Multer
+        const imgUrl = process.env.IMAGE_PATH; // No quotes around process.env.IMAGE_PATH
+        const imagePath = `${imgUrl}${req.file.filename}`;
         
-        const imagePath = `http://13.60.227.23:5000/uploads/${req.file.filename}`;
-
         // Update package with new image path
         const addNewImage = cricleDestinationModel({ image: imagePath, destinationId });
         await addNewImage.save();
@@ -40,7 +40,7 @@ const fetchcricleDestination = async (req, res) => {
 
         // Fetch circle destinations
         const cricleDestinations = await cricleDestinationModel.find({ status: true }).select("-__v -createdAt -updatedAt");
-       
+       console.log(cricleDestinations);
         if (!cricleDestinations || cricleDestinations.length === 0) {
             return res.status(401).json({ error: "No destinations found!" });
         }
