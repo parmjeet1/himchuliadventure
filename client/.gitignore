@@ -4,6 +4,10 @@ node_modules/
 # Environment variables
 .env
 
+# Next.js build and cache files
+.next/
+
+
 # Logs
 logs/
 *.log
