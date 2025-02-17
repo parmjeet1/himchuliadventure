@@ -18,7 +18,7 @@ function ContactPage() {
           priority
         />
         <h1 className="text-4xl md:text-5xl font-bold relative z-10">
-          Contact Us
+          Contact Us!
         </h1>
       </div>
 
