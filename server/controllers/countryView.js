@@ -20,9 +20,7 @@ const countryWisegridView=async(req,res)=>{
     const packages=await packageModel.find({destinationId:{$in:destionIdArray},
         featureStatus: { $in: [true, "true"] } })
 
-   console.log('countryids',countryIdArray);
-   console.log('destionIdArray',destionIdArray);
-   console.log(packages);
+
 const coverHeading=countryIds.map(c=>c.coverHeading)
 const coverParagraph=countryIds.map(c=>c.coverParagraph)
 const homeFetaureImage=countryIds.map(c=>c.homeFetaureImage);

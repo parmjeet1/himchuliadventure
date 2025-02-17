@@ -1,8 +1,10 @@
 
 const cricleDestinationModel = require("../models/CricleDestinationModel");
 const DestinationsModel = require("../models/DestinationsModel");
+require("dotenv").config();
 
 const addCrcileImageToDestination = async (req, res) => {
+    console.log("working");
     try {
 
         if (!req.file) {
@@ -15,8 +17,9 @@ const addCrcileImageToDestination = async (req, res) => {
         }
 
         // Correctly use the stored filename from Multer
-        const imagePath = `/uploads/${req.file.filename}`;
-
+        const imgUrl=process.env.IMAGE_PATH;
+        const imagePath = `${imgUrl}${req.file.filename}`;
+console.log(imagePath);
         // Update package with new image path
         const addNewImage = cricleDestinationModel({ image: imagePath, destinationId });
         await addNewImage.save();
@@ -32,11 +35,12 @@ const addCrcileImageToDestination = async (req, res) => {
 };
 
 const fetchcricleDestination = async (req, res) => {
-    console.log("working")
+    console.log("working")    
     try {
+
         // Fetch circle destinations
         const cricleDestinations = await cricleDestinationModel.find({ status: true }).select("-__v -createdAt -updatedAt");
-       
+       console.log(cricleDestinations);
         if (!cricleDestinations || cricleDestinations.length === 0) {
             return res.status(401).json({ error: "No destinations found!" });
         }
@@ -49,7 +53,7 @@ const fetchcricleDestination = async (req, res) => {
 
         // Map destinations to their names
         const destinationNames = destinations.map(dest => dest.name);
-
+console.log(destinationNames);
         return res.status(200).json({ images: cricleDestinations.map(dest => dest.image), destinations: destinationNames });
 
     } catch (error) {

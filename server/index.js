@@ -7,23 +7,7 @@ const cors = require("cors");
 
 // Connect to DB
 connectDB();
-const allowedOrigins = [
-  "http://localhost:3000",  // Allow localhost (for development)
-  "http://himchuliadventure.com" // Replace with your actual client domain
-];
-const corsOptions = {
-  origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
-      } else {
-          callback(new Error("Not allowed by CORS"));
-      }
-  },
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // If using cookies or authentication
-};
 
-app.use(cors(corsOptions));
 // Import Routes
 const adminRoutes = require("./routes/adminRoute");
 const dashBoardRouter = require("./routes/dashboardRoute");
@@ -42,7 +26,23 @@ const countryPublicRouter = require("./routes/countryPublicRoute");
 const galleryRouter=require("./routes/galleryRoute");
 const galleryPublicRouter = require("./routes/galleryPublicRoute");
 const cricleRouter = require("./routes/cricleDestinationRoute");
-// Middleware
+
+const allowedOrigins = [
+  'http://localhost:3000', 
+  'http://13.60.227.23:3000', 
+  'https://himchuliadventure.com'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
