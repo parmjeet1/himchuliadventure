@@ -17,8 +17,8 @@ const addCrcileImageToDestination = async (req, res) => {
         }
 
         // Correctly use the stored filename from Multer
-        const imgUrl="http://13.60.227.23:5000/uploads/";
-        const imagePath = `${imgUrl}${req.file.filename}`;
+        
+        const imagePath = `http://13.60.227.23:5000/uploads/${req.file.filename}`;
 
         // Update package with new image path
         const addNewImage = cricleDestinationModel({ image: imagePath, destinationId });
