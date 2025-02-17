@@ -26,6 +26,7 @@ const countryPublicRouter = require("./routes/countryPublicRoute");
 const galleryRouter=require("./routes/galleryRoute");
 const galleryPublicRouter = require("./routes/galleryPublicRoute");
 const cricleRouter = require("./routes/cricleDestinationRoute");
+const criclePublicRouter = require("./routes/cricleImagePublicRoute");
 
 const allowedOrigins = [
   'http://localhost:3000', 
@@ -68,6 +69,8 @@ app.use("/api/country",countryPublicRouter);
 app.use("/api/admin/galery",galleryRouter);
 app.use("/api/gallery",galleryPublicRouter)
 app.use("/api/admin/destination",cricleRouter);
+app.use("/api/image",criclePublicRouter);
+
 
 // Default Route
 app.get("/", (req, res) => {
