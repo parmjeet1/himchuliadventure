@@ -35,12 +35,10 @@ const addCrcileImageToDestination = async (req, res) => {
 };
 
 const fetchcricleDestination = async (req, res) => {
-       
     try {
-
-        // Fetch circle destinations
+        // Fetch circle destinations with status true
         const cricleDestinations = await cricleDestinationModel.find({ status: true }).select("-__v -createdAt -updatedAt");
-       console.log(cricleDestinations);
+        
         if (!cricleDestinations || cricleDestinations.length === 0) {
             return res.status(401).json({ error: "No destinations found!" });
         }
@@ -51,15 +49,25 @@ const fetchcricleDestination = async (req, res) => {
         // Find destinations
         const destinations = await DestinationsModel.find({ _id: { $in: destinationIds } });
 
-        // Map destinations to their names
-        const destinationNames = destinations.map(dest => dest.name);
-console.log(destinationNames);
-        return res.status(200).json({ images: cricleDestinations.map(dest => dest.image), destinations: destinationNames });
+        // Create a map of destinationId -> destination name for quick lookup
+        const destinationMap = {};
+        destinations.forEach(dest => {
+            destinationMap[dest._id] = dest.name;
+        });
+
+        // Map images with their corresponding destination names
+        const result = cricleDestinations.map(dest => ({
+            image: dest.image,
+            destination: destinationMap[dest.destinationId] || "Unknown Destination"
+        }));
+
+        return res.status(200).json({ data: result });
 
     } catch (error) {
         return res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
+
 
 
 
