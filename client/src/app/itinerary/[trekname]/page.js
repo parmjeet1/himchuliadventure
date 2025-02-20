@@ -14,18 +14,20 @@ import {
   FaClock,
 } from "react-icons/fa";
 import axios from "axios";
+import SpinningGlobeLoader from "@/components/LoadingScreen";
 
 export default function ItineraryPage() {
   const [expandedDays, setExpandedDays] = useState({});
   const [itinerary, setItinerary] = useState(null); // State to store the fetched itinerary data
   const { trekname } = useParams();
   const trekName = trekname;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://13.60.227.23:5000/api/trip-detail/${trekName}`
+          `${BASE_URL}api/trip-detail/${trekName}`
         );
         console.log("Fetched Data:", response.data.details);
         setItinerary(response.data.details); // Set the fetched data to the state
@@ -42,7 +44,7 @@ export default function ItineraryPage() {
 
   // Return loading state if itinerary is still being fetched
   if (!itinerary) {
-    return <div>Loading...</div>;
+    return <SpinningGlobeLoader />;
   }
 
   return (

@@ -22,3 +22,11 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+.nav-item {
+  @apply text-2xl tracking-widest font-semibold text-gray-800 hover:text-primary transition duration-300;
+}
+
+.dropdown-item {
+  @apply text-xl text-gray-700 hover:text-primary py-2 block text-center;
+}

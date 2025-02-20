@@ -15,28 +15,28 @@ export default function Home() {
 
       <div
         className="relative"
-        style={{
-          background: `linear-gradient(
-            rgba(231, 255, 240, 0) 0%, 
-            rgba(219, 255, 232, 0.8) 19.27%, 
-            rgba(219, 255, 232, 0.8) 88.54%, 
-            rgba(231, 255, 240, 0) 100%)`,
-        }}
+        // style={{
+        //   background: `linear-gradient(
+        //     rgba(231, 255, 240, 0) 0%,
+        //     rgba(219, 255, 232, 0.8) 19.27%,
+        //     rgba(219, 255, 232, 0.8) 88.54%,
+        //     rgba(231, 255, 240, 0) 100%)`,
+        // }}
       >
-        <div className="max-w-screen-xl mx-auto px-4">
+        <div className="max-w-screen-xl mx-auto px-4 md:px-20">
           <Trips />
         </div>
       </div>
       <div
         className="relative"
-        style={{
-          background: `linear-gradient(
-            rgba(231, 240, 255, 0) 0%, 
-            rgba(219, 232, 255, 0.8) 19.27%, 
-            rgba(219, 232, 255, 0.8) 88.54%, 
-            rgba(231, 240, 255, 0) 100%
-          )`,
-        }}
+        // style={{
+        //   background: `linear-gradient(
+        //     rgba(231, 240, 255, 0) 0%,
+        //     rgba(219, 232, 255, 0.8) 19.27%,
+        //     rgba(219, 232, 255, 0.8) 88.54%,
+        //     rgba(231, 240, 255, 0) 100%
+        //   )`,
+        // }}
       >
         <ExploreIndia />
         <Gallery />

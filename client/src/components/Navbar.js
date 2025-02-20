@@ -1,10 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
+import { FaArrowDown } from "react-icons/fa";
+import { useTreks } from "@/context/TrekContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const { treks } = useTreks();
 
   return (
     <nav className="sticky top-0 bg-gray-900 z-50">
@@ -78,21 +83,17 @@ export default function Navbar() {
                 dropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
               }`}
             >
-              {[
-                "Everest Base Camp",
-                "Annapurna Circuit",
-                "Langtang Valley",
-              ].map((destination) => (
-                <li key={destination}>
+              {treks.map((destination) => (
+                <li key={destination.name}>
                   <a
-                    href={`/itinerary/Pangarchulla%20Trek%207%20Days%206%20Nights`}
+                    href={`/itinerary/${destination.name}`}
                     className="block text-sm px-4 py-2 text-black hover:bg-primary hover:text-white transition-all duration-300"
                     onClick={() => {
                       setDropdownOpen(false);
                       setIsOpen(false);
                     }}
                   >
-                    {destination}
+                    {destination.name}
                   </a>
                 </li>
               ))}
@@ -125,104 +126,79 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`z-30 fixed inset-0 bg-white flex flex-col items-center justify-center space-y-6 transition-all duration-300 ${
+        className={`z-30 fixed inset-0 bg-white flex flex-col items-center justify-center space-y-5 transition-transform duration-300 ${
           isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
         } md:hidden`}
       >
-        {/* Home */}
-        <a
-          href="/"
-          className="text-2xl tracking-widest font-semibold hover:text-gray-900 transition"
-          onClick={() => setIsOpen(false)}
-        >
+        {/* Menu Items */}
+        <Link href="/" className="nav-item" onClick={() => setIsOpen(false)}>
           Home
-        </a>
+        </Link>
 
-        {/* Destinations Dropdown for Mobile */}
-        <div className="relative">
+        {/* Destinations Dropdown */}
+        <div className="relative dropdown-container">
           <button
-            className="text-2xl tracking-widest font-semibold hover:text-gray-900 transition flex items-center"
-            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="nav-item flex items-center gap-2"
+            onClick={() => setDropdownOpen((prev) => !prev)}
           >
             Destinations
-            <svg
-              className={`w-5 h-5 ml-2 transition-transform ${
+            <span
+              className={`transform transition-transform ${
                 dropdownOpen ? "rotate-180" : ""
               }`}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+              <FaArrowDown size={16} />
+            </span>
           </button>
 
-          {/* Dropdown List for Mobile */}
+          {/* Dropdown List */}
           {dropdownOpen && (
-            <ul className="mt-2 space-y-3 text-center">
-              {[
-                "Everest Base Camp",
-                "Annapurna Circuit",
-                "Langtang Valley",
-              ].map((destination) => (
-                <li key={destination}>
-                  <a
-                    href={`/itinerary/Pangarchulla%20Trek%207%20Days%206%20Nights`}
-                    className="text-xl tracking-widest font-semibold hover:text-primary transition"
+            <ul className="absolute left-1/2 top-full mt-2 w-48 bg-white shadow-lg rounded-lg p-3 transform -translate-x-1/2">
+              {treks.map((destination) => (
+                <li key={destination.name} className="dropdown-item">
+                  <Link
+                    href={`/itinerary/${destination.name}`}
                     onClick={() => {
                       setDropdownOpen(false);
                       setIsOpen(false);
                     }}
                   >
-                    {destination}
-                  </a>
+                    {destination.name}
+                  </Link>
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-        {/* About-us */}
-        <a
+        <Link
           href="/about"
-          className="text-2xl tracking-widest font-semibold hover:text-gray-900 transition"
+          className="nav-item"
           onClick={() => setIsOpen(false)}
         >
-          About-us
-        </a>
-
-        {/* Contact */}
-        <a
+          About Us
+        </Link>
+        <Link
           href="/contact"
-          className="text-2xl tracking-widest font-semibold hover:text-gray-900 transition"
+          className="nav-item"
           onClick={() => setIsOpen(false)}
         >
           Contact
-        </a>
-
-        {/* Treks offered */}
-        <a
+        </Link>
+        <Link
           href="/treks"
-          className="text-2xl tracking-widest font-semibold hover:text-gray-900 transition"
+          className="nav-item"
           onClick={() => setIsOpen(false)}
         >
           Treks Offered
-        </a>
-
-        {/* Gallery */}
-        <a
+        </Link>
+        <Link
           href="/gallery"
-          className="text-2xl tracking-widest font-semibold hover:text-gray-900 transition"
+          className="nav-item"
           onClick={() => setIsOpen(false)}
         >
           Gallery
-        </a>
+        </Link>
       </div>
     </nav>
   );
