@@ -28,7 +28,7 @@ const addCountryCoverView=async (req,res)=>{
     return res.status(422).json({ error: "Image file is required" });
   }
   
-  console.log(req.file.filename);
+
   const {countryId,coverHeading,coverParagraph}=req.body;
 if(!countryId||!coverHeading||!coverParagraph){
   return res.status(201).json({error:"Fileds can not be blank "})

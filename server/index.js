@@ -27,6 +27,8 @@ const galleryRouter=require("./routes/galleryRoute");
 const galleryPublicRouter = require("./routes/galleryPublicRoute");
 const cricleRouter = require("./routes/cricleDestinationRoute");
 const criclePublicRouter = require("./routes/cricleImagePublicRoute");
+const dynamicImageRouter = require("./routes/dynamicImageRoute");
+const customerRouter = require("./routes/customerRoute");
 
 const allowedOrigins = [
   'http://localhost:3000', 
@@ -70,8 +72,8 @@ app.use("/api/admin/galery",galleryRouter);
 app.use("/api/gallery",galleryPublicRouter)
 app.use("/api/admin/destination",cricleRouter);
 app.use("/api/image",criclePublicRouter);
-
-
+app.use("/api/admin/dynamic-image",dynamicImageRouter)
+app.use("/api/customer",customerRouter)
 // Default Route
 app.get("/", (req, res) => {
   res.send("Hello Himchuli! Server is running.");

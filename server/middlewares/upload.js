@@ -16,11 +16,10 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const fileExt = path.extname(file.originalname);
-    const fileName = path.basename(file.originalname, fileExt);
     const newFileName = `${uuidv4()}${fileExt}`;
     cb(null, newFileName);
-    req.newFileName = newFileName; // Store the new file name in request object
-  },
+
+      },
 });
 
 const fileFilter = (req, file, cb) => {

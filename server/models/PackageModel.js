@@ -7,6 +7,8 @@ const packageSchema=mongoose.Schema({
     cost:{type:String,required:true},
     description:{type:String,required:true},
     imageUrl:{type:String},
+    imageCaption:{type:String},
+
     featureStatus:{type:Boolean,default:false}
 },{timestamps:true});
 const packageModel=mongoose.model("Package",packageSchema);
