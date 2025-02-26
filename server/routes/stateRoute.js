@@ -3,6 +3,6 @@ const { addState, fetchState, editState } = require("../controllers/stateControl
 const stateRouter=express.Router();
 
 stateRouter.post("/add-state",addState);
-stateRouter.get("/:stateId",fetchState);
+stateRouter.get("/:countryId",fetchState);
 stateRouter.post("/edit-state",editState);
 module.exports=stateRouter;

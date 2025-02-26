@@ -29,24 +29,17 @@ const cricleRouter = require("./routes/cricleDestinationRoute");
 const criclePublicRouter = require("./routes/cricleImagePublicRoute");
 const dynamicImageRouter = require("./routes/dynamicImageRoute");
 const customerRouter = require("./routes/customerRoute");
+const tourRouter = require("./routes/tourRoute");
 
 const allowedOrigins = [
   'http://localhost:3000', 
   'http://13.60.227.23:3000', 
   'https://himchuliadventure.com'
 ];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: "*",  // Allow all origins
   credentials: true
 }));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -74,6 +67,7 @@ app.use("/api/admin/destination",cricleRouter);
 app.use("/api/image",criclePublicRouter);
 app.use("/api/admin/dynamic-image",dynamicImageRouter)
 app.use("/api/customer",customerRouter)
+app.use("/api/tours",tourRouter);
 // Default Route
 app.get("/", (req, res) => {
   res.send("Hello Himchuli! Server is running.");

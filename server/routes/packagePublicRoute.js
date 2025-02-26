@@ -4,5 +4,5 @@ const { packageDetails } = require("../controllers/packageWithAggrigation");
 const packagePublicRouter=express.Router();
 packagePublicRouter.get("/",fetchPackage);
 
-packagePublicRouter.get("/packageDetails",packageDetails);
+packagePublicRouter.get("/:limitNumber",packageDetails);
 module.exports=packagePublicRouter;

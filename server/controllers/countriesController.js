@@ -52,13 +52,13 @@ const addCountryCoverView = async (req, res) => {
 
 const fetchCountry = async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(400).json({ error: "id could not foud" });
-    }
+    //const { id } = req.params;
+    // if (!id) {
+    //   return res.status(400).json({ error: "id could not foud" });
+    // }
 
     const dbCountries = await countriesModel
-      .findOne({ _id: id })
+      .find()
       .select("-updatedBy -createdAt -updatedAt");
     if (!dbCountries) {
       res.status(401).json({ error: "Country could not found!" });
