@@ -27,6 +27,30 @@ return res.status(200).json({dbDestination});
 }
 }
 
+const editDestination = async (req, res) => {
+    try {
+      const { id, name,location,description } = req.body;
+      if (!id || !name) {
+        return res.status(400).json({ error: "Fileds can not be empty" });
+      }
+      const updates = await DestinationsModel.findByIdAndUpdate(
+        id,
+        { $set: { name,location,description } },
+        { new: true }
+      );
+      if (!updates) {
+        return res.status(404).json({
+          status: "fail",
+          message: "entry not found",
+          error: { id: "No Entry found " }
+        });
+      }
+      if (updates) {
+        return res.status(200).json({ message: " Edited successfully!", updates });
+      }
+    } catch (error) {
+      return res.status(500).json({ error:"internal error", details:error.message });
+    }
+  };
 
-
-module.exports={addDestination,fetchDestination}
+module.exports={addDestination,fetchDestination,editDestination}

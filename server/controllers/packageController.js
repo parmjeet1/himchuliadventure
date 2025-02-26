@@ -76,4 +76,29 @@ const user=await User.findOne({_id:country.updatedBy})
  
 }
 
-module.exports={addPackage,addPackageFeatureImage,fetchPackage}
+const editpackage = async (req, res) => {
+  try {
+    const { id, name,days,nights,cost,countryViewStatus,description, featureStatus} = req.body;
+    if (!id || !name) {
+      return res.status(400).json({ error: "Fileds can not be empty" });
+    }
+    const updates = await packageModel.findByIdAndUpdate(
+      id,
+      { $set: { name,days,nights,cost,featureStatus,countryViewStatus,description,featureStatus } },
+      { new: true }
+    );
+    if (!updates) {
+      return res.status(404).json({
+        status: "fail",
+        message: "entry not found",
+        error: { id: "No Entry found " }
+      });
+    }
+    if (updates) {
+      return res.status(200).json({ message: " Edited successfully!", updates });
+    }
+  } catch (error) {
+    return res.status(500).json({ error:"internal error", details:error.message });
+  }
+};
+module.exports={addPackage,addPackageFeatureImage,fetchPackage,editpackage }

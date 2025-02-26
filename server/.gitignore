@@ -1,4 +1,7 @@
 node_modules
 doc.txt
 .env  
-uploads                                                                                                                                                                                                                                                                                                                                                                                                              
+uploads
+index.js
+package.json
+package-lock.json                                                                                                                                                                                                                                                                                                                                                                                                              

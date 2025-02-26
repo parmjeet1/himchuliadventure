@@ -35,6 +35,30 @@ const packageId=await packageModel.findOne({name}).select("_id");
 
 }
 
+const editItinirary = async (req, res) => {
+  try {
+    const { id, title,day,description} = req.body;
+    if (!id || !title  || !day || !description) {
+      return res.status(400).json({ error: "Fileds can not be empty" });
+    }
+    const updates = await ItinarayModel.findByIdAndUpdate(
+    id,
+      { $set: { title,day,description } },
+      { new: true }
+    );
+    if (!updates) {
+      return res.status(404).json({
+        status: "fail",
+        message: "entry not found",
+        error: { id: "No Entry found " }
+      });
+    }
+    if (updates) {
+      return res.status(200).json({ message: " Edited successfully!", updates });
+    }
+  } catch (error) {
+    return res.status(500).json({ error:"internal error", details:error.message });
+  }
+};
 
-
-module.exports = { addDay,fetchItinaray };
+module.exports = { addDay,fetchItinaray,editItinirary };

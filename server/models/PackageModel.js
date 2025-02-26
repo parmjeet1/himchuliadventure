@@ -9,7 +9,8 @@ const packageSchema=mongoose.Schema({
     imageUrl:{type:String},
     imageCaption:{type:String},
 
-    featureStatus:{type:Boolean,default:false}
+    countryViewStatus:{type:Boolean,default:false},
+    FeaturedStatus:{type:Boolean,defaule:false}
 },{timestamps:true});
 const packageModel=mongoose.model("Package",packageSchema);
 module.exports=packageModel;

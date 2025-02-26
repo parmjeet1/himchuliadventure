@@ -2,6 +2,7 @@ const customerModel = require("../models/CustomerModel");
 
 const addCustomerDetail = async (req, res) => {
     try {
+        console.log("dfsdsd");
         const { packageId, name, email, mobile, message } = req.body;
 
         // Create customer data object dynamically

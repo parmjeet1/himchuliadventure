@@ -11,14 +11,19 @@ const countryWisegridView=async(req,res)=>{
 }
    const countryIdArray=countryIds.map(c=>c._id)
 
-   const destinationIds=await DestinationsModel.find({ countryId:{$in:countryIdArray}}).select("_id");
+
+
+   const destinationIds=await DestinationsModel.find({ 
+    countryId:{$in:countryIdArray},
+    
+}).select("_id");
    if (destinationIds.length === 0) {
     return res.status(201).json({ error: "No destinations found for the given countries" });
 }
    const destionIdArray=destinationIds.map(d=>d._id);
    
     const packages=await packageModel.find({destinationId:{$in:destionIdArray},
-        featureStatus: { $in: [true, "true"] } })
+        countryViewStatus: { $in: [true, "true"] } })
 
 
 const coverHeading=countryIds.map(c=>c.coverHeading)
