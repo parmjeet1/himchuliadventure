@@ -30,6 +30,7 @@ const criclePublicRouter = require("./routes/cricleImagePublicRoute");
 const dynamicImageRouter = require("./routes/dynamicImageRoute");
 const customerRouter = require("./routes/customerRoute");
 const tourRouter = require("./routes/tourRoute");
+const allPackagesRouter = require("./routes/allPackageRoute");
 
 const allowedOrigins = [
   'http://localhost:3000', 
@@ -68,6 +69,7 @@ app.use("/api/image",criclePublicRouter);
 app.use("/api/admin/dynamic-image",dynamicImageRouter)
 app.use("/api/customer",customerRouter)
 app.use("/api/tours",tourRouter);
+app.use("/api/all-packages",allPackagesRouter)
 // Default Route
 app.get("/", (req, res) => {
   res.send("Hello Himchuli! Server is running.");

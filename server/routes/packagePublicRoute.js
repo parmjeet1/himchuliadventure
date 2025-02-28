@@ -1,10 +1,11 @@
 const express=require("express");
 const { fetchPackage } = require("../controllers/packageController");
-const { packageDetails, allPackages } = require("../controllers/packageWithAggrigation");
+const { packageDetails } = require("../controllers/packageWithAggrigation");
+const { ourPackages } = require("../controllers/allPackagesController");
 const packagePublicRouter=express.Router();
 packagePublicRouter.get("/",fetchPackage);
 
 packagePublicRouter.get("/:limitNumber",packageDetails);
 
-packagePublicRouter.get("/all-packages",allPackages)
+packagePublicRouter.get("/asdf",ourPackages )
 module.exports=packagePublicRouter;
