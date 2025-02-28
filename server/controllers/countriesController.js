@@ -2,7 +2,7 @@ const countriesModel = require("../models/CountriesModel");
 const addCountry = async (req, res) => {
   try {
     const { name, updatedBy } = req.body;
-    const dbCountry = await countriesModel.findOne({ name });
+    const dbCountry = await countriesModel.findOne({ name,updatedBy });
 
     if (dbCountry) {
       return res
@@ -52,18 +52,18 @@ const addCountryCoverView = async (req, res) => {
 
 const fetchCountry = async (req, res) => {
   try {
-    //const { id } = req.params;
-    // if (!id) {
-    //   return res.status(400).json({ error: "id could not foud" });
-    // }
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "id could not foud" });
+    }
 
     const dbCountries = await countriesModel
-      .find()
-      .select("-updatedBy -createdAt -updatedAt");
+      .find({updatedBy:id})
+      .select(" -createdAt -updatedAt");
     if (!dbCountries) {
       res.status(401).json({ error: "Country could not found!" });
     }
-    console.log(dbCountries);
+
     return res.status(200).json({ country: dbCountries });
   } catch (error) {
     return res

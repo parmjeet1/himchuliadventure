@@ -5,7 +5,7 @@ const { addCountry, fetchCountry, addCountryCoverView, editCountry } = require("
 const upload = require("../middlewares/upload");
 
 CountriesRouter.post("/add-country",addCountry);
-CountriesRouter.get("/",fetchCountry);
+CountriesRouter.get("/:id",fetchCountry);
 CountriesRouter.post("/edit-country-cover",upload.single("image"),addCountryCoverView);
 CountriesRouter.post("/edit-country", editCountry );
 

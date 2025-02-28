@@ -79,4 +79,72 @@ return res.json(
     return res.status(500).json({"name":"internal error",error})
 }
 }
-module.exports={packageDetails};
+
+const allPackages=async(req,res)=>{
+    try{
+
+    const packages= await packageModel.aggregate([
+    {  $match:{ featureStatus:true  }
+    },
+    {
+        $lookup:{
+            from:"destinations",
+            localField:"destinationId",
+            foreignField:"_id",
+             as: "destinationDetails"
+        }
+    },
+    
+    { $unwind:"$destinationDetails" },
+    {
+        $lookup:{
+            from:"countries",
+            localField:"destinationDetails.countryId",
+            foreignField:"_id",
+            as:"countryDetails"
+        }
+    },
+    { $unwind:"$countryDetails" },
+    
+    ,
+    {
+        $project:{
+         
+            countryId:"$countryDetails._id",
+            packageId:"$_id",
+            destinationId:"$destinationDetails._id",
+            _id:0,
+            name:1,
+            days:1,
+            nights:1,
+            cost:1,
+            description:1,
+            imageUrl:1,
+            destinationName: "$destinationDetails.name",
+            location: "$destinationDetails.location"
+           
+        }
+    
+    }  ])
+    return res.json(
+        packages.map(pkg => ({
+           
+            countryId:pkg.countryId,
+            destinationId:pkg.destinationId,
+            packageId: pkg.packageId,  
+            name: pkg.name,
+            days: pkg.days,
+            nights: pkg.nights,
+            cost: pkg.cost,
+            description: pkg.description,
+            imageUrl: pkg.imageUrl,
+            destinationName: pkg.destinationName,
+            location: pkg.location
+         
+        }))
+    );
+    }catch(error){
+        return res.status(500).json({"name":"internal error",error})
+    }
+    }
+module.exports={packageDetails,allPackages};
