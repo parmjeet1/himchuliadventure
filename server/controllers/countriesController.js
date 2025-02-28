@@ -11,7 +11,7 @@ const addCountry = async (req, res) => {
     }
     const newCountry = new countriesModel({ name, updatedBy });
     await newCountry.save();
-    return res.status(201).json({
+    return res.status(200).json({
       message: "New Country added Successfully",
       name: newCountry,
     });

@@ -6,7 +6,7 @@ try{
 if(!countryId  || !name){ return res.status(401).json({error:"date can not be empty"}) }
 const newState=await new StatesModel({countryId,name});
 newState.save();
-return res.status(201).json({message:"new state added successfully",state:newState.name});
+return res.status(200).json({message:"new state added successfully",state:newState});
 
 
    }catch(error){ return res.status(401).json({error:error.message}) }
