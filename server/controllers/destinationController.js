@@ -55,4 +55,18 @@ const editDestination = async (req, res) => {
     }
   };
 
-module.exports={addDestination,fetchDestination,editDestination}
+
+  
+  const fetchDestinationStateWise= async (req,res)=>{
+    try{
+    
+    const {stateId}=req.params;
+    
+    const destinations =await DestinationsModel.find({stateId}).select("-createdAt -updatedAt -__v");
+    
+    return res.status(200).json({destinations});
+    }catch(error){
+        return res.status(201).json({message:error.message})
+    }
+    }
+module.exports={addDestination,fetchDestination,editDestination,fetchDestinationStateWise}
