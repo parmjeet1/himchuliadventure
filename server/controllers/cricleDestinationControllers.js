@@ -4,7 +4,7 @@ const DestinationsModel = require("../models/DestinationsModel");
 require("dotenv").config();
 
 const addCrcileImageToDestination = async (req, res) => {
-    console.log("working");
+    
     try {
 
         if (!req.file) {

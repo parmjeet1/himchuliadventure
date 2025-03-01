@@ -32,6 +32,9 @@ caption
 
 
 */
+const fs = require("fs");
+const path = require("path");
+
 
 const packageModel = require("../models/PackageModel");
 const SliderModel = require("../models/SliderModel");
@@ -81,7 +84,7 @@ const NewDynamicImage = async (req, res) => {
         }
 
         if(countryId){
-            const updateCountry=await countriesModel.findByIdAndUpdate({_id:countryId},{homeFetaureImage:imagePath,gridViewStatus:true, coverHeading,coverParagraph,updatedAt:Date.now()});
+            const updateCountry=await countriesModel.findByIdAndUpdate({_id:countryId},{homeFetaureImage:imagePath,gridViewStatus:true, coverHeading,coverParagraph,updatedAt:Date.now()},{new:true});
 if(!updateCountry){return res.status(201).json({error:"Could not Update"})}
 return res.status(200).json({message:"updated Successfully",updateCountry})
 
@@ -105,4 +108,30 @@ return res.status(200).json({message:"updated Successfully",updateCountry})
     }
 };
 
-module.exports={NewDynamicImage}
+const fetchAllImages=(req,res)=>{
+   
+console.log("fetch images working")
+const UPLOADS_DIR = path.join(__dirname, "..", "uploads"); 
+
+
+    try {
+        // Read all files from the uploads directory
+        fs.readdir(UPLOADS_DIR, (err, files) => {
+            if (err) {
+                return res.status(500).json({ error: "Error reading directory" });
+            }
+
+            // Filter image files (JPG, PNG, JPEG, GIF, WebP)
+            const imagePaths = files
+            .filter(file => /\.(jpg|jpeg|png|gif|webp)$/i.test(file))
+            .map(file => `/uploads/${file}`); // Mapping filenames to full paths
+
+            return res.status(200).json({ images: imagePaths });
+        });
+    } catch (error) {
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+}
+
+module.exports={NewDynamicImage,fetchAllImages}

@@ -6,5 +6,5 @@ const cricleSchema=mongoose.Schema({
 },{Timestamp:true})
 
 
-const cricleDestinationModel= mongoose.model("cricleDestinationModel",cricleSchema);
+const cricleDestinationModel= mongoose.model("cricleDestination",cricleSchema);
 module.exports=cricleDestinationModel;

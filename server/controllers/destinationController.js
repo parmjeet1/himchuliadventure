@@ -17,10 +17,12 @@ try{
 
 const {nod}=req.params;
 
-if (!nod || isNaN(nod) || nod <= 0) {
-    return res.status(400).json({ message: "Valid number of destinations (nod) is required" });
+const query =DestinationsModel.find().select("-createdAt -updatedAt -__v");
+if(nod){
+  query.limit(Number(nod));
 }
-const dbDestination= await DestinationsModel.find().select("-createdAt -updatedAt -__v").limit(Number(nod));
+const dbDestination=await query.exec();
+
 return res.status(200).json({dbDestination});
 }catch(error){
     return res.status(201).json({message:error.message})
