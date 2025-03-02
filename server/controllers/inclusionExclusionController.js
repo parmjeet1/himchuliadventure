@@ -72,8 +72,21 @@ const fetchInclusionExclusion = async (req, res) => {
     }
 };
 
+const fetchPackageAminties = async (req, res) => {
+    try {
+        const PackageAminities = await PackageAmintiesModel.find().sort({createdAt:-1});
+
+        return res.status(200).json({ status: "success", data: PackageAminities });
+
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+};
 
 
 
 
-module.exports={addInclusionExclusion,fetchInclusionExclusion}
+
+
+
+module.exports={addInclusionExclusion,fetchInclusionExclusion,fetchPackageAminties}
