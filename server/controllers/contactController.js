@@ -5,7 +5,7 @@ const addCustomerDetail = async (req, res) => {
         console.log("dfsdsd");
         const { packageId, name, email, mobile, message } = req.body;
 
-        // Create customer data object dynamically
+        
         const customerData = { name, email, mobile, message };
         if (packageId) {
             customerData.packageId = packageId;
@@ -27,4 +27,21 @@ const addCustomerDetail = async (req, res) => {
     }
 };
 
-module.exports = { addCustomerDetail };
+const fetchCustomerDetails = async (req, res) => {
+    try {
+        const customers = await customerModel.find().sort({ createdAt: -1 }).lean();
+
+        if (!customers || customers.length === 0) {
+            return res.status(404).json({ error: "No customers found" });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            data: customers
+        });
+
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error", details: error.message });
+    }
+};
+module.exports = { addCustomerDetail,fetchCustomerDetails };
