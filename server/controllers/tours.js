@@ -4,11 +4,13 @@ const StatesModel = require("../models/StatesModel");
 const DestinationsModel = require("../models/DestinationsModel");
 const packageModel = require("../models/PackageModel");
 const ItinarayModel = require("../models/ItinarayModel");
+const InclusionModel = require("../models/InclusionModel");
+const exclusionModel = require("../models/ExclusionModel");
 const addTour = async (req, res) => {
     const {
-       
+
         destinationName,
-        location,
+      
         destinationDescription,
         packageName,
         days,
@@ -16,56 +18,57 @@ const addTour = async (req, res) => {
         cost,
         packageDescription,
         stateId,
-        itineraries
+        itineraries,
+        packageAminitiesId
     } = req.body;
-
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-       
-
         const destination = new DestinationsModel({
-            
+
             stateId,
             name: destinationName,
-            location,
             description: destinationDescription,
         });
         await destination.save({ session });
 
         const package = new packageModel({
-            destinationId:destination._id,
+            destinationId: destination._id,
             name: packageName,
             days,
             nights,
             cost,
+            packageAminitiesId,
             description: packageDescription,
         });
         await package.save({ session });
 
-        if(Array.isArray(itineraries)&& itineraries.length>0){
-            const  itinerariesToInsert=itineraries.map(itinerary=>({
+       
+
+        if (Array.isArray(itineraries) && itineraries.length > 0) {
+            const itinerariesToInsert = itineraries.map(itinerary => ({
                 packageId: package._id, // Link to package
                 title: itinerary.title,
                 day: itinerary.day,
                 description: itinerary.description
             }))
-        await ItinarayModel.insertMany(itinerariesToInsert,{session});
+            await ItinarayModel.insertMany(itinerariesToInsert, { session });
         }
-        
-        
 
-        if(!stateId){
+
+
+        if (!stateId ) {
             await session.abortTransaction();
             session.endSession();
-        return res.status(404).json({ status: "fail", message: "State not found" });
-                    }
-                    await session.commitTransaction();
-                    session.endSession();
-    return res.status(200).json({status:"success",
-        message:"Tour added successfully",
-        packageId: package._id
-    })  
+            return res.status(404).json({ status: "fail", message: "State and pckage not found" });
+        }
+        await session.commitTransaction();
+        session.endSession();
+        return res.status(200).json({
+            status: "success",
+            message: "Tour added successfully",
+            packageId: package._id
+        })
     } catch (error) {
         await session.abortTransaction();  // Rollback all changes
         session.endSession();
@@ -76,4 +79,4 @@ const addTour = async (req, res) => {
         });
     }
 };
-module.exports={addTour};
+module.exports = { addTour };

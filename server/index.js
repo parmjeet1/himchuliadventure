@@ -31,6 +31,7 @@ const dynamicImageRouter = require("./routes/dynamicImageRoute");
 const customerRouter = require("./routes/customerRoute");
 const tourRouter = require("./routes/tourRoute");
 const allPackagesRouter = require("./routes/allPackageRoute");
+const inclsionExclusionRouter = require("./routes/inclusionExclusionRoute");
 
 const allowedOrigins = [
   'http://localhost:3000', 
@@ -70,6 +71,9 @@ app.use("/api/admin/dynamic-image",dynamicImageRouter)
 app.use("/api/customer",customerRouter)
 app.use("/api/tours",tourRouter);
 app.use("/api/all-packages",allPackagesRouter)
+app.use("/api/inclusoin-exclusion",inclsionExclusionRouter)
+
+
 // Default Route
 app.get("/", (req, res) => {
   res.send("Hello Himchuli! Server is running.");
