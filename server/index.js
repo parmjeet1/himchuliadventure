@@ -32,6 +32,7 @@ const customerRouter = require("./routes/customerRoute");
 const tourRouter = require("./routes/tourRoute");
 const allPackagesRouter = require("./routes/allPackageRoute");
 const inclsionExclusionRouter = require("./routes/inclusionExclusionRoute");
+const statusRouter = require("./routes/statusRoute");
 
 const allowedOrigins = [
   'http://localhost:3000', 
@@ -72,6 +73,8 @@ app.use("/api/customer",customerRouter)
 app.use("/api/tours",tourRouter);
 app.use("/api/all-packages",allPackagesRouter)
 app.use("/api/inclusoin-exclusion",inclsionExclusionRouter)
+
+app.use("/api/admin/toggle-status",statusRouter)
 
 
 // Default Route

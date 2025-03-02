@@ -3,80 +3,98 @@ const { default: mongoose } = require("mongoose");
 const PackageAmintiesModel = require("../models/PackageAmintiesModel");
 const InclusionExclusionModel = require("../models/InclusionExclusionModel");
 
-const addInclusionExclusion=async(req,res)=>{
-{
-try{
-    const {AmintiesName, inclusionExclusionList }=req.body;
-    const session=await mongoose.startSession();
-    session.startTransaction();
-    const packageAminties=new PackageAmintiesModel({name:AmintiesName},);
-    await packageAminties.save({session});
-    if(Array.isArray(inclusionExclusionList) && inclusionExclusionList.length>0){
-      const toInsert = inclusionExclusionList.map(eachList=>({
-        packageAminitiesId:packageAminties._id,
-            inclusion: eachList.inclusion,
-            exclusion:eachList.exclusion
-        }))
-        await InclusionExclusionModel.insertMany(toInsert,{session})
-    }
+const addInclusionExclusion = async (req, res) => {
+    try {
+        const { AmintiesName, inclusion, exclusion } = req.body;
 
-    if(!packageAminties._id){
-        await session.abortTransaction();
+        if (!AmintiesName || !Array.isArray(inclusion) || !Array.isArray(exclusion)) {
+            return res.status(400).json({ error: "Invalid input format. Ensure AmintiesName, inclusion, and exclusion are provided as arrays." });
+        }
+
+        if (inclusion.length !== exclusion.length) {
+            return res.status(400).json({ error: "Inclusion and exclusion arrays must have the same length." });
+        }
+
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        const packageAminities = new PackageAmintiesModel({ name: AmintiesName });
+        await packageAminities.save({ session });
+
+        const toInsert = inclusion.map((inc, index) => ({
+            packageAminitiesId: packageAminities._id,
+            inclusion: inc,
+            exclusion: exclusion[index]
+        }));
+
+        await InclusionExclusionModel.insertMany(toInsert, { session });
+        await session.commitTransaction();
         session.endSession();
 
+        return res.status(200).json({
+            status: "success",
+            message: "Inclusion and Exclusion have been added successfully",
+            packageAminitiesId: packageAminities._id
+        });
 
-       return res.status(404).json({"error":"packageAminties does not found"});
+    } catch (error) {
+        return res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
-    await session.commitTransaction();
-    session.endSession();
-    return res.status(200).json({
-        status: "success",
-        message: "Inclusion and Exclusion has been added successfully",
-        packageAmintiesId: packageAminties._id
-    })
+};
 
-}catch(error){
-    res.status(500).json({"internal error":error})
-}
-}
-}
+
+
 
 const fetchInclusionExclusion = async (req, res) => {
     try {
-        const PackageAminities = await PackageAmintiesModel.aggregate([
+        const packageAminities = await PackageAmintiesModel.aggregate([
             {
                 $lookup: {
-                    from: "inclusionexclusions", // ✅ Ensure correct collection name
+                    from: "inclusionexclusions", // 
                     localField: "_id",
                     foreignField: "packageAminitiesId",
                     as: "inclusionExclusionDetails"
                 }
             },
-            { $unwind: "$inclusionExclusionDetails" }, // ✅ Unwind to flatten array
             {
                 $project: {
                     _id: 0,
-                    packageAminitiesId: "$_id",
-                    inclusionExclusionId: "$inclusionExclusionDetails._id",
-                    inclusion: "$inclusionExclusionDetails.inclusion", // ✅ Ensure these fields exist
-                    exclusion: "$inclusionExclusionDetails.exclusion"
+                    AmintiesName: "$name", 
+                    inclusion: {
+                        $map: {
+                            input: "$inclusionExclusionDetails",
+                            as: "details",
+                            in: "$$details.inclusion"
+                        }
+                    },
+                    exclusion: {
+                        $map: {
+                            input: "$inclusionExclusionDetails",
+                            as: "details",
+                            in: "$$details.exclusion"
+                        }
+                    }
                 }
-            },
-            { $sort: { createdAt: -1 } } // ✅ Sort by latest
+            }
         ]);
 
-        return res.status(200).json({ status: "success", data: PackageAminities });
+        if (!packageAminities || packageAminities.length === 0) {
+            return res.status(404).json({ error: "No data found" });
+        }
+
+        return res.status(200).json({ status: "success", data: packageAminities });
 
     } catch (error) {
         return res.status(500).json({ error: "Internal server error", details: error.message });
     }
 };
 
+
 const fetchPackageAminties = async (req, res) => {
     try {
         const PackageAminities = await PackageAmintiesModel.find().sort({createdAt:-1});
 
-        return res.status(200).json({ status: "success", data: PackageAminities });
+        return res.status(200).json({  data: PackageAminities });
 
     } catch (error) {
         return res.status(500).json({ error: "Internal server error", details: error.message });
