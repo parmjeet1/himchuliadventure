@@ -1,11 +1,11 @@
 const DestinationsModel = require("../models/DestinationsModel")
 
 const addDestination=(req,res)=>{
-    const {countryId,stateId,name,location,description}=req.body
-    if(!countryId|| !stateId || !name || !location || !description){
+    const {countryId,stateId,name,description}=req.body
+    if(!countryId|| !stateId || !name  || !description){
         return res.status(401).json({message:"fileds can not be empty"})
     }
-    const newDestination= new DestinationsModel({name,countryId,stateId,location,description});
+    const newDestination= new DestinationsModel({name,countryId,stateId,description});
 if(!newDestination){ return res.status(401).json({message:"Error in databse insertion"})
 }
     newDestination.save();
@@ -31,13 +31,13 @@ return res.status(200).json({dbDestination});
 
 const editDestination = async (req, res) => {
     try {
-      const { id, name,location,description } = req.body;
+      const { id, name,description } = req.body;
       if (!id || !name) {
         return res.status(400).json({ error: "Fileds can not be empty" });
       }
       const updates = await DestinationsModel.findByIdAndUpdate(
         id,
-        { $set: { name,location,description } },
+        { $set: { name,description } },
         { new: true }
       );
       if (!updates) {

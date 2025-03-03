@@ -2,6 +2,8 @@ const mongoose=require("mongoose");
 const packageSchema=mongoose.Schema({
     destinationId:{type:mongoose.Schema.Types.ObjectId,ref:"Destinations", required: true },
     packageAminitiesId:{type:mongoose.Schema.Types.ObjectId,ref:"PackageAminties"},
+    countryId:{type:mongoose.Schema.Types.ObjectId,ref:"countries"},
+    
     countryViewStatus:{type:Boolean,default:false},
     featuredStatus:{type:Boolean,default:false},
     name:{type:String,required:true},

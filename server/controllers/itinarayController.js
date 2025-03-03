@@ -22,6 +22,34 @@ const fetchItinaray= async (req,res) =>{
 
     const {name}=req.params;
 if(!name){ return res.status(400).json({error:"tilte  could not foud"}) }
+
+const packages= packageModel.aggregate([
+  {$match:{name}}
+  ,
+  {
+    $lookup:{
+      from:"inclusionexclusions",
+      localField:"packageAminitiesId",
+      foreignField: "packageAminitiesId",
+      as: "inclusionExclusionDetails"
+}
+  },
+  { $unwind: "$inclusionExclusionDetails"}
+  ,{
+    $project:{
+      _id:1,
+      packageId:1,
+      title:1,
+      day:1,
+      description:1,
+      "$inclusionExclusionDetails.inclusion":1,
+      "$inclusionExclusionDetails.exclusion":1
+      
+
+    }
+  }
+
+])
 const packageId=await packageModel.findOne({name}).select("_id");
 
     const itinaray=await ItinarayModel.find({packageId:packageId}).select("-updatedBy -createdAt -updatedAt");
