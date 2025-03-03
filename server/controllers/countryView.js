@@ -19,11 +19,13 @@ const countryWisegridView = async (req, res) => {
             },
             {
                 $project: {
+
                     countryId: "$_id",
-                    status: "$gridViewStatus",
+                    name:"$name",
+                    gridViewStatus: "$gridViewStatus",
                     heading: "$coverHeading",
                     paragraph: "$coverParagraph",
-                    imgurl: "$homeFeatureImage",
+                    image: "$homeFetaureImage",
                     Packages: {
                         $filter: {
                             input: "$packages",
