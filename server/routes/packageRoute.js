@@ -8,7 +8,7 @@ packageRouter.post("/admin/package/add-package",addPackage)
 packageRouter.post("/admin/package/edit-package",editpackage);
 packageRouter.get("/all-packages/destination-wise/:destinationId",destinationWisePackage);
 packageRouter.get("/package",packagesGridView);
-packageRouter.get("/package/all-packages",allPackages);
+packageRouter.get("/all-packages",allPackages);
 packageRouter.get("/package/:limit",packageDetails);
 packageRouter.post("/admin/toggle-status/update",togglePackageStatus);
 

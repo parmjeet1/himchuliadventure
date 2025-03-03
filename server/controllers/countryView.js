@@ -5,7 +5,7 @@ const packageModel = require("../models/PackageModel");
 const countryWisegridView=async(req,res)=>{
    const countryIds=await CountriesModel.find({ gridViewStatus: true })
    .select("_id coverHeading coverParagraph homeFetaureImage name");
-   
+    res.send(countryIds)
    if (countryIds.length === 0) {
     return res.status(201).json({ error: "There are no Countries for Cover view" });
 }
@@ -23,7 +23,7 @@ const countryWisegridView=async(req,res)=>{
    const destionIdArray=destinationIds.map(d=>d._id);
    
     const packages=await packageModel.find({destinationId:{$in:destionIdArray},
-        countryViewStatus: { $in: [true, "true"] } })
+        countryViewStatus: { $in:true } })
 
 
 const coverHeading=countryIds.map(c=>c.coverHeading)
