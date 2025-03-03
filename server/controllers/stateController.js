@@ -2,9 +2,9 @@ const StatesModel=require("../models/StatesModel");
 const addState= async (req,res)=>{
 try{
 
- const {countryId,name}=req.body;
+ const {countryId,name,updatedBy}=req.body;
 if(!countryId  || !name){ return res.status(401).json({error:"date can not be empty"}) }
-const newState=await new StatesModel({countryId,name});
+const newState=await new StatesModel({countryId,name,updatedBy});
 newState.save();
 return res.status(200).json({message:"new state added successfully",state:newState});
 

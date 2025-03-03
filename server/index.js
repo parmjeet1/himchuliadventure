@@ -21,7 +21,6 @@ const inclusionRouter = require("./routes/inclusionRoute");
 const tripDetailRouter = require("./routes/tripDetailRoute");
 const sliderRouter = require("./routes/sliderRoute");
 const sliderPublicRouter = require("./routes/sliderPublicRoute");
-const packagePublicRouter = require("./routes/packagePublicRoute");
 const countryPublicRouter = require("./routes/countryPublicRoute");
 const galleryRouter=require("./routes/galleryRoute");
 const galleryPublicRouter = require("./routes/galleryPublicRoute");
@@ -30,9 +29,9 @@ const criclePublicRouter = require("./routes/cricleImagePublicRoute");
 const dynamicImageRouter = require("./routes/dynamicImageRoute");
 const customerRouter = require("./routes/customerRoute");
 const tourRouter = require("./routes/tourRoute");
-const allPackagesRouter = require("./routes/allPackageRoute");
+
 const inclsionExclusionRouter = require("./routes/inclusionExclusionRoute");
-const statusRouter = require("./routes/statusRoute");
+
 
 const allowedOrigins = [
   'http://localhost:3000', 
@@ -59,10 +58,10 @@ app.use("/api/itinary", itinarayRouter);
 app.use("/api/admin/exclusion", exclusionRouter);
 app.use("/api/admin/inclusion", inclusionRouter);
 app.use("/api/trip-detail", tripDetailRouter);
-app.use("/api/admin/package", packageRouter); // Package API route
+app.use("/api", packageRouter); // Package API route
 app.use("/api/admin/slider",sliderRouter);
 app.use("/api/slider",sliderPublicRouter);
-app.use("/api/package",packagePublicRouter);
+
 app.use("/api/country",countryPublicRouter);
 app.use("/api/admin/galery",galleryRouter);
 app.use("/api/gallery",galleryPublicRouter)
@@ -71,10 +70,10 @@ app.use("/api/image",criclePublicRouter);
 app.use("/api/admin/dynamic-image",dynamicImageRouter)
 app.use("/api/customer",customerRouter)
 app.use("/api/tours",tourRouter);
-app.use("/api/all-packages",allPackagesRouter)
+
 app.use("/api/inclusoin-exclusion",inclsionExclusionRouter)
 
-app.use("/api/admin/toggle-status",statusRouter)
+
 
 
 // Default Route

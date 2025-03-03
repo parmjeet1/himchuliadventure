@@ -19,7 +19,8 @@ const addTour = async (req, res) => {
         packageDescription,
         stateId,
         itineraries,
-        packageAminitiesId
+        packageAminitiesId,
+        updatedBy
     } = req.body;
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -29,6 +30,7 @@ const addTour = async (req, res) => {
             stateId,
             name: destinationName,
             description: destinationDescription,
+            updatedBy
         });
         await destination.save({ session });
 
@@ -40,6 +42,7 @@ const addTour = async (req, res) => {
             cost,
             packageAminitiesId,
             description: packageDescription,
+            updatedBy
         });
         await package.save({ session });
 
@@ -50,7 +53,8 @@ const addTour = async (req, res) => {
                 packageId: package._id, // Link to package
                 title: itinerary.title,
                 day: itinerary.day,
-                description: itinerary.description
+                description: itinerary.description,
+                updatedBy
             }))
             await ItinarayModel.insertMany(itinerariesToInsert, { session });
         }

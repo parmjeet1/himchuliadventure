@@ -5,7 +5,7 @@ const InclusionExclusionModel = require("../models/InclusionExclusionModel");
 
 const addInclusionExclusion = async (req, res) => {
     try {
-        const { AmintiesName, inclusion, exclusion } = req.body;
+        const { AmintiesName, inclusion, exclusion,updatedBy } = req.body;
 
         if (!AmintiesName || !Array.isArray(inclusion) || !Array.isArray(exclusion)) {
             return res.status(400).json({ error: "Invalid input format. Ensure AmintiesName, inclusion, and exclusion are provided as arrays." });
@@ -18,13 +18,14 @@ const addInclusionExclusion = async (req, res) => {
         const session = await mongoose.startSession();
         session.startTransaction();
 
-        const packageAminities = new PackageAmintiesModel({ name: AmintiesName });
+        const packageAminities = new PackageAmintiesModel({ name: AmintiesName,updatedBy });
         await packageAminities.save({ session });
 
         const toInsert = inclusion.map((inc, index) => ({
             packageAminitiesId: packageAminities._id,
             inclusion: inc,
-            exclusion: exclusion[index]
+            exclusion: exclusion[index],
+            updatedBy
         }));
 
         await InclusionExclusionModel.insertMany(toInsert, { session });

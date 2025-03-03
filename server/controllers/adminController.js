@@ -18,7 +18,7 @@ const adminRegistration = async (req, res) => {
         const hasPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, password: hasPassword,mobile, role });
         await user.save();
-        res.status(201).json({ "message": "user Register successfully!", "user": user });
+        res.status(201).json({ "message": "user Register successfully!", "id": user._id,"name":user.name,"email":user.email });
 
     } catch (error) {
         return res.status(400).json({ "Internal error": error });

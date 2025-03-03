@@ -4,8 +4,8 @@ const Destinationschema=new mongoose.Schema({
     stateId:{type:mongoose.Schema.Types.ObjectId,ref:'StatesModel',required:true},
     name:{type :String, required:true},
     // location:{type:String, required:true},
-    description:{type:String, required:true}
-    //updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' }
+    description:{type:String, required:true},
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' }
        
 }, {timestamps:true} )
 

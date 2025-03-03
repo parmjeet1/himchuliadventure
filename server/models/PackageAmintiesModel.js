@@ -1,7 +1,8 @@
 
 const mongoose=require("mongoose");
 const PackageAmintiesSchema = new mongoose.Schema({
-    name: { type: String }
+    name: { type: String },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'users' }
     
 }, {timestamps:true} );
 mongoose.module
