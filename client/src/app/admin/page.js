@@ -7,7 +7,6 @@ import {
   FaGlobeAsia,
 } from "react-icons/fa";
 import Link from "next/link";
-import { FaMountainCity, FaPhotoFilm } from "react-icons/fa6";
 
 export default function AdminDashboard() {
   return (

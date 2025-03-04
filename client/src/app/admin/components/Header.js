@@ -13,7 +13,8 @@ import {
 } from "react-icons/fi";
 import { useAdminAuth } from "@/context/AdminAuthContext";
 import { useRouter } from "next/navigation";
-import { FaHiking } from "react-icons/fa";
+import { FaDesktop, FaHiking } from "react-icons/fa";
+import { FaMountain } from "react-icons/fa6";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -115,6 +116,12 @@ const NavItem = ({ Icon, title, selected, setSelected }) => {
       router.push("/admin"); // Redirects to admin dashboard
     } else if (title === "Add Trek") {
       router.push("/admin/add-trek");
+    } else if (title === "Visit Site") {
+      router.push("/"); // Redirects to the main site
+    } else if (title === "Users") {
+      router.push("/admin/user-queries");
+    } else if (title === "treks") {
+      router.push("/admin/all-treks");
     }
   };
 
@@ -146,33 +153,42 @@ const LogoutButton = ({ handleLogout, Icon }) => (
   </motion.button>
 );
 
-// Logo Component
-const Logo = () => (
-  <motion.div
-    layout
-    className="grid size-10 place-content-center rounded-md bg-indigo-600"
-  >
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 50 39"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="fill-white"
+// Logo Component// Logo Component with Navigation
+const Logo = () => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push("/admin"); // Redirects to admin dashboard
+  };
+
+  return (
+    <motion.div
+      onClick={handleClick}
+      layout
+      className="grid size-10 place-content-center rounded-md bg-indigo-600 cursor-pointer"
     >
-      <path d="M16.4992 2H37.5808L22.0816 24.9729H1L16.4992 2Z" />
-      <path d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z" />
-    </svg>
-  </motion.div>
-);
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 50 39"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="fill-white"
+      >
+        <path d="M16.4992 2H37.5808L22.0816 24.9729H1L16.4992 2Z" />
+        <path d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z" />
+      </svg>
+    </motion.div>
+  );
+};
 
 // Navigation Items Array
 const navItems = [
   { title: "Home", Icon: FiHome },
   { title: "Add Trek", Icon: FaHiking },
-  { title: "Products", Icon: FiShoppingCart },
-  { title: "Members", Icon: FiUsers },
-  { title: "Tags", Icon: FiTag },
+  { title: "Visit Site", Icon: FaDesktop },
+  { title: "Users", Icon: FiUsers },
+  { title: "Treks", Icon: FaMountain },
   { title: "Logout", Icon: FiArrowDownLeft },
 ];
 

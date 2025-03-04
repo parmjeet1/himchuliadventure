@@ -24,11 +24,8 @@ const Footer = () => {
           <Link href="/contact" className="text-sm text-white hover:underline">
             Contact
           </Link>
-          <Link
-            href="/destinations"
-            className="text-sm text-white hover:underline"
-          >
-            Destinations
+          <Link href="/treks" className="text-sm text-white hover:underline">
+            All Tours
           </Link>
         </div>
 
@@ -54,13 +51,6 @@ const Footer = () => {
             rel="noopener noreferrer"
           >
             <FaInstagram className="text-xl text-white hover:text-primary transition" />
-          </a>
-          <a
-            href="https://github.com/your-github"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FaGithub className="text-xl text-white hover:text-primary transition" />
           </a>
         </div>
 
