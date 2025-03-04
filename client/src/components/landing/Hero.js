@@ -26,9 +26,9 @@ function Hero() {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}api/package`)
+      .get(`${BASE_URL}api/package/6`)
       .then((response) => {
-        setTreks(response.data.name);
+        setTreks(response.data);
       })
       .catch((error) => {
         console.log("Error fetching the the trek data inside hero, ", error);

@@ -1,74 +1,230 @@
 "use client";
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { FaBars, FaTimes, FaHome, FaUsers, FaCog } from "react-icons/fa";
+import React, { useState } from "react";
+import {
+  FiBarChart,
+  FiChevronDown,
+  FiChevronsRight,
+  FiDollarSign,
+  FiHome,
+  FiMonitor,
+  FiShoppingCart,
+  FiTag,
+  FiUsers,
+} from "react-icons/fi";
+import { FaHiking } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-
-  const links = [
-    { name: "Dashboard", href: "/admin", icon: <FaHome size={20} /> },
-    { name: "Manage Users", href: "/admin/users", icon: <FaUsers size={20} /> },
-    { name: "Settings", href: "/admin/settings", icon: <FaCog size={20} /> },
-  ];
+  const [open, setOpen] = useState(true);
+  const [selected, setSelected] = useState("Dashboard");
 
   return (
-    <>
-      {/* Hamburger Button (Mobile) */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden p-3 fixed top-4 left-4 z-40"
-      >
-        <FaBars size={24} />
-      </button>
+    <motion.nav
+      layout
+      className="sticky top-0 h-screen shrink-0 border-r border-slate-300 bg-white p-2"
+      style={{
+        width: open ? "225px" : "fit-content",
+      }}
+    >
+      <TitleSection open={open} />
 
-      {/* Sidebar (Mobile & Desktop) */}
-      <aside
-        className={`fixed lg:static left-0 top-0 w-64 h-screen bg-white shadow-lg p-6 transition-transform duration-300 z-40 ${
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
+      <div className="space-y-1">
+        <Option
+          Icon={FiHome}
+          title="Dashboard"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+        <Option
+          Icon={FaHiking}
+          title="Add Trek"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          notifs={3}
+        />
+        <Option
+          Icon={FiMonitor}
+          title="View Site"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+        <Option
+          Icon={FiShoppingCart}
+          title="Products"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+        <Option
+          Icon={FiTag}
+          title="Tags"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+        <Option
+          Icon={FiBarChart}
+          title="Analytics"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+        <Option
+          Icon={FiUsers}
+          title="Members"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+      </div>
+
+      <ToggleClose open={open} setOpen={setOpen} />
+    </motion.nav>
+  );
+};
+
+const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    setSelected(title);
+    if (title === "Dashboard") {
+      router.push("/admin");
+    } else if (title === "Add Trek") {
+      router.push("/admin/add-trek");
+    }
+  };
+
+  return (
+    <motion.button
+      layout
+      onClick={() => handleClick()}
+      className={`relative flex h-10 w-full items-center rounded-md transition-colors ${
+        selected === title
+          ? "bg-indigo-100 text-indigo-800"
+          : "text-slate-500 hover:bg-slate-100"
+      }`}
+    >
+      <motion.div
+        layout
+        className="grid h-full w-10 place-content-center text-lg"
       >
-        {/* Close Button (Mobile) */}
-        <button
-          onClick={() => setIsOpen(false)}
-          className="lg:hidden absolute top-4 right-4 text-gray-600"
+        <Icon />
+      </motion.div>
+      {open && (
+        <motion.span
+          layout
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.125 }}
+          className="text-xs font-medium"
         >
-          <FaTimes size={24} />
-        </button>
-
-        <h2 className="text-xl font-bold mb-4">Admin Panel</h2>
-        <nav>
-          <ul>
-            {links.map((link) => (
-              <li key={link.href} className="mb-2">
-                <Link
-                  href={link.href}
-                  className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-                    pathname === link.href
-                      ? "bg-blue-500 text-white"
-                      : "text-gray-700 hover:bg-gray-200"
-                  }`}
-                  onClick={() => setIsOpen(false)} // Close menu on click (mobile)
-                >
-                  {link.icon}
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Overlay (Closes Sidebar When Clicked Outside) */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
-          onClick={() => setIsOpen(false)}
-        ></div>
+          {title}
+        </motion.span>
       )}
-    </>
+
+      {notifs && open && (
+        <motion.span
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{
+            opacity: 1,
+            scale: 1,
+          }}
+          style={{ y: "-50%" }}
+          transition={{ delay: 0.5 }}
+          className="absolute right-2 top-1/2 size-4 rounded bg-indigo-500 text-xs text-white"
+        >
+          {notifs}
+        </motion.span>
+      )}
+    </motion.button>
+  );
+};
+
+const TitleSection = ({ open }) => {
+  return (
+    <div className="mb-3 border-b border-slate-300 pb-3">
+      <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors hover:bg-slate-100">
+        <div className="flex items-center gap-2">
+          <Logo />
+          {open && (
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.125 }}
+            >
+              <span className="block text-xs font-semibold">TomIsLoading</span>
+              <span className="block text-xs text-slate-500">Pro Plan</span>
+            </motion.div>
+          )}
+        </div>
+        {open && <FiChevronDown className="mr-2" />}
+      </div>
+    </div>
+  );
+};
+
+const Logo = () => {
+  return (
+    <motion.div
+      layout
+      className="grid size-10 shrink-0 place-content-center rounded-md bg-indigo-600"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 50 39"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="fill-slate-50"
+      >
+        <path
+          d="M16.4992 2H37.5808L22.0816 24.9729H1L16.4992 2Z"
+          stopColor="#000000"
+        ></path>
+        <path
+          d="M17.4224 27.102L11.4192 36H33.5008L49 13.0271H32.7024L23.2064 27.102H17.4224Z"
+          stopColor="#000000"
+        ></path>
+      </svg>
+    </motion.div>
+  );
+};
+
+const ToggleClose = ({ open, setOpen }) => {
+  return (
+    <motion.button
+      layout
+      onClick={() => setOpen((pv) => !pv)}
+      className="absolute bottom-0 left-0 right-0 border-t border-slate-300 transition-colors hover:bg-slate-100"
+    >
+      <div className="flex items-center p-2">
+        <motion.div
+          layout
+          className="grid size-10 place-content-center text-lg"
+        >
+          <FiChevronsRight
+            className={`transition-transform ${open && "rotate-180"}`}
+          />
+        </motion.div>
+        {open && (
+          <motion.span
+            layout
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.125 }}
+            className="text-xs font-medium"
+          >
+            Hide
+          </motion.span>
+        )}
+      </div>
+    </motion.button>
   );
 };
 

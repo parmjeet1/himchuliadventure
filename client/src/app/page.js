@@ -2,6 +2,7 @@
 
 import ContactUs from "@/components/landing/Contactus";
 import Destination from "@/components/landing/Destination";
+
 import ExploreIndia from "@/components/landing/ExploreIndia";
 import Gallery from "@/components/landing/Gallery";
 import Hero from "@/components/landing/Hero";

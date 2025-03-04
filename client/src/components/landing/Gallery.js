@@ -172,7 +172,7 @@ const Gallery = () => {
     const fetchImages = async () => {
       try {
         const response = await axios.get(`${BASE_URL}api/gallery/`);
-        console.log("comming from gallery", response.data.gallery);
+        console.log(response.data.gallery, "comming from gallery");
         setImages(response.data.gallery);
       } catch (error) {
         console.error("Error fetching images:", error);

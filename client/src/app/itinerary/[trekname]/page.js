@@ -17,6 +17,40 @@ import axios from "axios";
 import SpinningGlobeLoader from "@/components/LoadingScreen";
 
 export default function ItineraryPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    message: "",
+  });
+
+  const [packageId, setPackageId] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const dataToSend = {
+      ...formData,
+      packageId, // Include packageId
+    };
+    console.log(dataToSend, "this is the contact data");
+    try {
+      const response = await axios.post(
+        `${BASE_URL}api/customer/add-customer`,
+        dataToSend
+      );
+      console.log("Success:", response.data);
+      alert("Form submitted successfully!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong!");
+    }
+  };
+
   const [expandedDays, setExpandedDays] = useState({});
   const [itinerary, setItinerary] = useState(null); // State to store the fetched itinerary data
   const { trekname } = useParams();
@@ -29,6 +63,7 @@ export default function ItineraryPage() {
         const response = await axios.get(
           `${BASE_URL}api/trip-detail/${trekName}`
         );
+        setPackageId(response.data.details.package._id);
         console.log("Fetched Data:", response.data.details);
         setItinerary(response.data.details); // Set the fetched data to the state
       } catch (error) {
@@ -36,7 +71,7 @@ export default function ItineraryPage() {
       }
     };
     fetchData();
-  }, [trekName]);
+  }, [BASE_URL]);
 
   const toggleDescription = (day) => {
     setExpandedDays((prev) => ({ ...prev, [day]: !prev[day] }));
@@ -52,7 +87,9 @@ export default function ItineraryPage() {
       {/* Hero Section */}
       <div
         className="h-[50vh] md:h-[70vh] text-3xl md:text-4xl text-white flex justify-center items-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${itinerary.package.imageUrl})` }}
+        style={{
+          backgroundImage: `url(${BASE_URL}${itinerary.package.imageUrl})`,
+        }}
       >
         {itinerary.package.name}
       </div>
@@ -201,15 +238,18 @@ export default function ItineraryPage() {
           <h1 className="text-secondary font-semibold text-xl md:text-2xl text-center md:text-left">
             Mountains are calling?
           </h1>
-          <form className="space-y-3 md:space-y-4 mt-4">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4 mt-4">
             {[
-              ["text", "Your Name", FaUserAlt],
-              ["email", "Your Email", FaEnvelope],
-              ["tel", "Your Mobile Number", FaPhoneAlt],
-            ].map(([type, placeholder, Icon], idx) => (
+              ["text", "Your Name", "name", FaUserAlt],
+              ["email", "Your Email", "email", FaEnvelope],
+              ["tel", "Your Mobile Number", "mobile", FaPhoneAlt],
+            ].map(([type, placeholder, name, Icon], idx) => (
               <div key={idx} className="relative">
                 <input
                   type={type}
+                  name={name}
+                  value={formData[name]}
+                  onChange={handleChange}
                   className="w-full p-3 pl-10 rounded-lg border focus:ring-2 focus:ring-primary"
                   placeholder={placeholder}
                   required
@@ -219,6 +259,9 @@ export default function ItineraryPage() {
             ))}
             <div className="relative">
               <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 className="w-full p-3 pt-10 rounded-lg border focus:ring-2 focus:ring-primary"
                 placeholder="Tell us more"
                 rows={4}

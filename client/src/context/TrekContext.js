@@ -12,8 +12,9 @@ export const TrekProvider = ({ children }) => {
   // Function to fetch treks from API
   const fetchTreks = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}api/package`);
-      const newData = response.data.name;
+      const response = await axios.get(`${BASE_URL}api/package/`);
+
+      const newData = response.data.packages;
       setTreks(newData);
       localStorage.setItem(
         CACHE_KEY,
@@ -29,8 +30,12 @@ export const TrekProvider = ({ children }) => {
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (!cachedData) return false; // No cache found
 
-    const { timestamp } = JSON.parse(cachedData);
-    return Date.now() - timestamp < EXPIRY_TIME; // Check if within 30 min
+    try {
+      const { timestamp } = JSON.parse(cachedData);
+      return Date.now() - timestamp < EXPIRY_TIME;
+    } catch (error) {
+      return false; // In case JSON parsing fails
+    }
   };
 
   // Load treks from cache or API

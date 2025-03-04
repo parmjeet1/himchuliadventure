@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import axios from "axios";
 
 import Link from "next/link";
 import {
@@ -65,7 +64,7 @@ const TrekCarousel = () => {
             <Link href={`/itinerary/${encodeURIComponent(trek.name)}`}>
               <div className="relative w-full h-80">
                 <Image
-                  src={trek.imageUrl}
+                  src={`${BASE_URL}${trek.imageUrl}`}
                   alt={trek.name}
                   fill
                   className="object-cover rounded-lg"

@@ -18,11 +18,16 @@ export default function AdminLogin() {
         email: username,
         password,
       });
-      if (response.status === 201) {
+
+      if (response.status === 200) {
+        console.log("comming from login", { username, password });
+        console.log(response.data);
         const token = response.data.token;
-        login({ username, token });
+        const userId = response.data.userId;
+        login({ username, token, userId });
       }
     } catch (error) {
+      setError(error);
       console.log(error);
     }
   };

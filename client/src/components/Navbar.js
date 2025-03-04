@@ -8,7 +8,7 @@ import { useTreks } from "@/context/TrekContext";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const { treks } = useTreks();
 
   return (
