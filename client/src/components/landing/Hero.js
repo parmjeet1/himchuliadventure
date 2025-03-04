@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
+
 import { Typewriter } from "react-simple-typewriter";
 import { FaSearch } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -25,14 +25,23 @@ function Hero() {
   const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}api/package/6`)
-      .then((response) => {
-        setTreks(response.data);
-      })
-      .catch((error) => {
-        console.log("Error fetching the the trek data inside hero, ", error);
-      });
+    const fetchTreks = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}api/package`);
+        setTreks(response.data.packages);
+      } catch (error) {
+        console.log("Error fetching the trek data inside hero, ", error);
+      }
+    };
+    fetchTreks();
+    // axios
+    //   .get(`${BASE_URL}api/package/`)
+    //   .then((response) => {
+    //     setTreks(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error fetching the the trek data inside hero, ", error);
+    //   });
   }, []);
 
   useEffect(() => {
