@@ -22,33 +22,80 @@ const addCountry = async (req, res) => {
   }
 };
 
-const addCountryCoverView = async (req, res) => {
-  if (!req.file) {
-    return res.status(422).json({ error: "Image file is required" });
-  }
+const toggleCountryGridStatus = async (req, res) => {
+  try {
+    const { countryId } = req.body;
 
-  const { countryId, coverHeading, coverParagraph } = req.body;
-  if (!countryId || !coverHeading || !coverParagraph) {
-    return res.status(201).json({ error: "Fileds can not be blank " });
-  }
-  const imagePath = `/uploads/${req.file.filename}`;
-  const updateCountry = await countriesModel.findOneAndUpdate(
-    { _id: countryId },
-    {
-      homeFetaureImage: imagePath,
-      gridViewStatus: true,
-      coverHeading,
-      coverParagraph,
-      updatedAt: Date.now(),
+    if (!countryId) {
+      return res.status(400).json({ message: "countryId is required" });
     }
-  );
-  if (!updateCountry) {
-    return res.status(201).json({ error: "Could not Update" });
+
+    const updatedCountry = await countriesModel.findOneAndUpdate(
+      { _id: countryId },
+      [{ $set: { gridViewStatus: { $not: "$gridViewStatus" } } }], // Toggle boolean value
+      { new: true }
+    );
+
+    if (!updatedCountry) {
+      return res.status(404).json({ message: "Country not found" });
+    }
+
+    return res.status(200).json({
+      message: "Success",
+      gridViewStatus: updatedCountry.gridViewStatus,
+    });
+  } catch (error) {
+    console.error("Error toggling gridViewStatus:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  return res
-    .status(200)
-    .json({ message: "updated Successfully", updateCountry });
 };
+
+
+const addCountryCoverView = async (req, res) => {
+  try {
+    console.log("hello")
+    const { countryId, coverHeading, coverParagraph } = req.body;
+
+    if (!countryId) {
+      return res.status(400).json({ error: "Country ID is required" });
+    }
+
+    let updateFields = { updatedAt: Date.now() };
+
+    // If only `countryId` is received, toggle `gridViewStatus`
+    if (!coverHeading && !coverParagraph && !req.file) {
+      updateFields.$bit = { gridViewStatus: { xor: 1 } }; // Toggle boolean
+    } else {
+      // Set `coverHeading` and `coverParagraph` only if provided
+      if (coverHeading && coverParagraph) {
+        updateFields.coverHeading = coverHeading;
+        updateFields.coverParagraph = coverParagraph;
+      }
+
+      // Validate & Update Image if file exists
+      if (req.file) {
+        updateFields.homeFetaureImage = `/uploads/${req.file.filename}`;
+      }
+    }
+
+    // Update the country document
+    const updateCountry = await countriesModel.findOneAndUpdate(
+      { _id: countryId },
+      updateFields,
+      { new: true } // Return updated document
+    );
+
+    if (!updateCountry) {
+      return res.status(500).json({ error: "Could not update" });
+    }
+
+    return res.status(200).json({ message: "Updated successfully", updateCountry });
+
+  } catch (error) {
+    return res.status(500).json({ "internal Error": error.message });
+  }
+};
+
 
 const fetchCountry = async (req, res) => {
   try {
@@ -100,4 +147,4 @@ const editCountry = async (req, res) => {
 
 const deleteCountry=(req,res)=>{}
 
-module.exports = { addCountry, fetchCountry, addCountryCoverView, editCountry };
+module.exports = { addCountry, fetchCountry, addCountryCoverView, editCountry,toggleCountryGridStatus };
